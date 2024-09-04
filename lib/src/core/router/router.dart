@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:meus_gastos/src/features/category/presentation/category.dart';
 import 'package:meus_gastos/src/features/login/presentation/login.dart';
 import 'package:meus_gastos/src/features/register/presentation/register.dart';
 
@@ -20,7 +21,11 @@ class AppRouter {
           settings: RouteSettings(name: settings.name),
           builder: (_) => const RegisterPage(),
         );
-
+      case '/category':
+        return CupertinoPageRoute(
+          settings: RouteSettings(name: settings.name),
+          builder: (_) => const CategoryPage(),
+        );
       default:
         return CupertinoPageRoute(
           settings: RouteSettings(name: settings.name),

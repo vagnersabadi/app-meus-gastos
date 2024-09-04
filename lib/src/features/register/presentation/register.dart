@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:meus_gastos/src/core/router/route.enum.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
 
-import '../../../shared/widgets/button_default.dart';
+import '../../../shared/widgets/button_default.widget.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -33,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   labelText: 'E-mail',
-                  hintText: 'Endereço de E-mail para logar',
+                  hintText: 'Endereço de E-mail',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -41,19 +42,33 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Senha',
-                  hintText: 'Digite sua Senha',
+                  hintText: 'Crie sua Senha',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 40),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Senha',
+                  hintText: 'Confirme sua Senha',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 60),
               ButtonDefault(
-                text: 'ENTRAR',
+                text: 'REGISTRAR',
                 onPressed: () => {},
               ),
               const SizedBox(height: 60),
               ButtonDefault(
-                text: 'REGISTRAR',
-                onPressed: () => {},
+                text: 'CANCELAR',
+                onPressed: () => {
+                    Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRouteEnum.loginPage.name,
+                    (route) => false,
+                  )
+                },
               )
             ],
           ),

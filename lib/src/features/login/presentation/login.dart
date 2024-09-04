@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/router/route.enum.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
 
-import '../../../shared/widgets/button_default.dart';
+import '../../../shared/widgets/button_default.widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -49,7 +49,13 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 60),
               ButtonDefault(
                 text: 'ENTRAR',
-                onPressed: () => {},
+                onPressed: () => {
+                    Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRouteEnum.categoryPage.name,
+                    (route) => false,
+                  )
+                },
               ),
               const SizedBox(height: 60),
               ButtonDefault(

@@ -1,4 +1,4 @@
-enum AppRouteEnum { loginPage, registerPage }
+enum AppRouteEnum { loginPage, registerPage, categoryPage }
 
 extension AppRouteExtension on AppRouteEnum {
   String get name {
@@ -7,8 +7,10 @@ extension AppRouteExtension on AppRouteEnum {
         return "/login";
       case AppRouteEnum.registerPage:
         return "/register";
+      case AppRouteEnum.categoryPage:
+        return "/category";
       default:
-        return "/login_page";
+        return "/login";
     }
   }
 }

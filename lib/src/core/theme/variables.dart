@@ -5,7 +5,7 @@ Color secondary = const Color(0xFFF6AAA5);
 Color tertiary = const Color(0xFFA0C8E5);
 Color title = const Color(0xFF545454);
 
-ColorScheme scheme = ColorScheme.fromSeed(seedColor: Colors.deepPurple);
+ColorScheme scheme = ColorScheme.fromSeed(seedColor: primary);
 
 TextStyle titleStyle1 =  TextStyle(
   fontSize: 28,
