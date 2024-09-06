@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/router/router.dart';
 import 'package:meus_gastos/src/features/login/view/login.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
+  
   runApp(const MyApp());
 }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "617709944602",
+    "project_id": "app-meus-gastos",
+    "storage_bucket": "app-meus-gastos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:617709944602:android:325a73fbe9a91154f476a3",
+        "android_client_info": {
+          "package_name": "com.meusgastos.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr6y-fTP439QyqTqqXooHkuSHnsfDycH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
