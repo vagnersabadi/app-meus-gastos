@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/router/router.dart';
-import 'package:meus_gastos/src/features/login/presentation/login.dart';
+import 'package:meus_gastos/src/features/login/view/login.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
 
 void main() {

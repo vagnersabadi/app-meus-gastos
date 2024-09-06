@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:meus_gastos/src/features/category/presentation/category.dart';
-import 'package:meus_gastos/src/features/login/presentation/login.dart';
-import 'package:meus_gastos/src/features/register/presentation/register.dart';
+import 'package:meus_gastos/src/features/category/view/category_add.dart';
+import 'package:meus_gastos/src/features/expenses/view/expenses_add.dart';
+import 'package:meus_gastos/src/features/home/view/home.dart';
+import 'package:meus_gastos/src/features/login/view/login.dart';
+import 'package:meus_gastos/src/features/register/view/register.dart';
 
 class AppRouter {
   static String currentRoute = "/";
@@ -21,10 +23,20 @@ class AppRouter {
           settings: RouteSettings(name: settings.name),
           builder: (_) => const RegisterPage(),
         );
-      case '/category':
+      case '/home':
         return CupertinoPageRoute(
           settings: RouteSettings(name: settings.name),
-          builder: (_) => const CategoryPage(),
+          builder: (_) => const HomePage(),
+        );
+      case '/category-add':
+        return CupertinoPageRoute(
+          settings: RouteSettings(name: settings.name),
+          builder: (_) => const CategoryAddPage(),
+        );
+      case '/expense-add':
+        return CupertinoPageRoute(
+          settings: RouteSettings(name: settings.name),
+          builder: (_) => const ExpenseAddPage(),
         );
       default:
         return CupertinoPageRoute(

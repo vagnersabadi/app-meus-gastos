@@ -19,9 +19,9 @@ TextStyle btn =  TextStyle(
   color: title,
 );
 
-TextStyle heading5 = const TextStyle(
-  fontSize: 18,
-  fontWeight: FontWeight.w600,
+TextStyle titleStyle2 = const TextStyle(
+  fontSize: 26,
+  fontWeight: FontWeight.w800,
 );
 
 TextStyle regular16pt = const TextStyle(

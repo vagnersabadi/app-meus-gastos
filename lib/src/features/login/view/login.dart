@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/router/route.enum.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
+import 'package:meus_gastos/src/features/login/models/login.model.dart';
 
 import '../../../shared/widgets/button_default.widget.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
+
+late final Login login; 
+
   @override
   Widget build(BuildContext context) {
-    final formRegisterKey = GlobalKey<FormState>();
+    final formLoginKey = GlobalKey<FormState>();
 
     return Scaffold(
       body: Form(
-        key: formRegisterKey,
+        key: formLoginKey,
         child: Padding(
           padding: const EdgeInsets.only(left: 8, right: 8, top: 100),
           child: Column(
@@ -26,7 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Registar',
+                'Entrar',
                 style: titleStyle1,
               ),
               const SizedBox(height: 50),
@@ -34,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   labelText: 'E-mail',
-                  hintText: 'Endereço de E-mail',
+                  hintText: 'Endereço de E-mail para logar',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -42,30 +46,28 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Senha',
-                  hintText: 'Crie sua Senha',
+                  hintText: 'Digite sua Senha',
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 40),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Senha',
-                  hintText: 'Confirme sua Senha',
-                  border: OutlineInputBorder(),
-                ),
+              const SizedBox(height: 60),
+              ButtonDefault(
+                text: 'ENTRAR',
+                onPressed: () => {
+                    Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRouteEnum.homePage.name,
+                    (route) => false,
+                  )
+                },
               ),
               const SizedBox(height: 60),
               ButtonDefault(
                 text: 'REGISTRAR',
-                onPressed: () => {},
-              ),
-              const SizedBox(height: 60),
-              ButtonDefault(
-                text: 'CANCELAR',
                 onPressed: () => {
-                    Navigator.pushNamedAndRemoveUntil(
+                  Navigator.pushNamedAndRemoveUntil(
                     context,
-                    AppRouteEnum.loginPage.name,
+                    AppRouteEnum.registerPage.name,
                     (route) => false,
                   )
                 },
