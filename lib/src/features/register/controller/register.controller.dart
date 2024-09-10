@@ -1,7 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:meus_gastos/src/core/model/login/login.model.dart';
+import 'package:meus_gastos/src/core/services/login/login.service.dart';
 
 class RegisterController {
+  final LoginService _loginService = LoginService();
   final formKey = GlobalKey<FormState>();
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
@@ -22,32 +24,19 @@ class RegisterController {
   register(context) async {
     String email = emailCtrl.text;
     String password = passwordCtrl.text;
-
-    final firebaseAuth = FirebaseAuth.instance;
     String message = '';
 
-    try {
-      await firebaseAuth.createUserWithEmailAndPassword(
-        email: email.trim(),
-        password: password.trim(),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Usuário registrado com sucesso!')),
-      );
-
-       
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        message = 'Já existe uma conta com esse e-mail.';
+    await _loginService.createLoginWithEmailAndPassword(email, password).then((LoginResult login) {
+      if (login.success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Usuário registrado com sucesso!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
-    }
+    });
+
   }
 }
