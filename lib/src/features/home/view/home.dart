@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meus_gastos/src/core/router/route.enum.dart';
+import 'package:meus_gastos/src/core/routes/route.enum.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
 
 class HomePage extends StatefulWidget {

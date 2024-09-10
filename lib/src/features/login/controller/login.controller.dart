@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:meus_gastos/src/core/router/route.enum.dart';
+import 'package:meus_gastos/src/core/routes/route.enum.dart';
 import 'package:meus_gastos/src/features/login/models/login.model.dart';
 
 class LoginController {
