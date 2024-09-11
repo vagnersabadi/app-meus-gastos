@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/routes/route.enum.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
+import 'package:meus_gastos/src/features/category/view/category_add_edit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,6 +46,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void showCategoryAddEditPage() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return const CategoryAddEditPage();
+      },
+    );
+  }
+
   void _onItemTapped(int index) {
     setState(() => _selectedIndex = index);
   }
@@ -80,20 +90,10 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               switch (_selectedIndex) {
                 case 0:
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    AppRouteEnum.expenseAddPage.name,
-                    (route) => false,
-                  );
-                  break;
-                case 2:
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    AppRouteEnum.categoryAddPage.name,
-                    (route) => false,
-                  );
+                  showCategoryAddEditPage();
                   break;
                 default:
+                  showCategoryAddEditPage();
               }
             },
           ),

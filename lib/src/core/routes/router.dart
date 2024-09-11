@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:meus_gastos/src/features/category/view/category_add.dart';
+import 'package:meus_gastos/src/features/category/view/category_add_edit.dart';
 import 'package:meus_gastos/src/features/expenses/view/expenses_add.dart';
 import 'package:meus_gastos/src/features/home/view/home.dart';
 import 'package:meus_gastos/src/features/login/view/login.dart';
@@ -31,7 +31,7 @@ class AppRouter {
       case '/category-add':
         return CupertinoPageRoute(
           settings: RouteSettings(name: settings.name),
-          builder: (_) => const CategoryAddPage(),
+          builder: (_) => const CategoryAddEditPage(),
         );
       case '/expense-add':
         return CupertinoPageRoute(
