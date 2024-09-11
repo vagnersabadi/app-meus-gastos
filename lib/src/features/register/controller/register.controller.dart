@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meus_gastos/src/core/model/login/login.model.dart';
+import 'package:meus_gastos/src/core/models/login/login.model.dart';
 import 'package:meus_gastos/src/core/services/login/login.service.dart';
 
 class RegisterController {

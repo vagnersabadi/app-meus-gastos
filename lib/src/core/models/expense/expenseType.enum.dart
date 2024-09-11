@@ -1,0 +1,5 @@
+
+enum TypeExpense {
+    input,
+    output
+}
