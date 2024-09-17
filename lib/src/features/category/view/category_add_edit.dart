@@ -11,54 +11,53 @@ class CategoryAddEditPage extends StatefulWidget {
 }
 
 class _CategoryAddEditPage extends State<CategoryAddEditPage> {
-
-CategoryAddEditController categoryCtrl = CategoryAddEditController();
+  CategoryAddEditController categoryCtrl = CategoryAddEditController();
 
   @override
   Widget build(BuildContext context) {
     return Form(
-        key: categoryCtrl.formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('Adicionar Categoria', style: titleStyle2),
-              const SizedBox(height: 50),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                controller: categoryCtrl.name,
-                decoration: const InputDecoration(
-                  labelText: 'Nome',
-                  hintText: 'Nome da categoria',
-                  border: OutlineInputBorder(),
-                ),
-                // validator: (value) => loginCtrl.validatorEmail(value),
+      key: categoryCtrl.formKey,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('Adicionar Categoria', style: titleStyle2),
+            const SizedBox(height: 50),
+            TextFormField(
+              keyboardType: TextInputType.emailAddress,
+              controller: categoryCtrl.name,
+              decoration: const InputDecoration(
+                labelText: 'Nome',
+                hintText: 'Nome da categoria',
+                border: OutlineInputBorder(),
               ),
-              const SizedBox(height: 40),
-              TextFormField(
-                controller: categoryCtrl.description,
-                decoration: const InputDecoration(
-                  labelText: 'Descrição',
-                  hintText: 'Descrição da categoria',
-                  border: OutlineInputBorder(),
-                ),
-                // validator: (value) => loginCtrl.validatorPassword(value),
+              // validator: (value) => loginCtrl.validatorEmail(value),
+            ),
+            const SizedBox(height: 40),
+            TextFormField(
+              controller: categoryCtrl.description,
+              decoration: const InputDecoration(
+                labelText: 'Descrição',
+                hintText: 'Descrição da categoria',
+                border: OutlineInputBorder(),
               ),
-              const SizedBox(height: 40),
-              ButtonDefault(
-                text: 'SALVAR',
-                onPressed: () => categoryCtrl.save(),
-              ),
-              const SizedBox(height: 10),
-              ButtonDefault(
-                text: 'CANCELAR',
-                onPressed: () => categoryCtrl.cancel(),
-              )
-            ],
-          ),
+              // validator: (value) => loginCtrl.validatorPassword(value),
+            ),
+            const SizedBox(height: 40),
+            ButtonDefault(
+              text: 'SALVAR',
+              onPressed: () => categoryCtrl.save(),
+            ),
+            const SizedBox(height: 10),
+            ButtonDefault(
+              text: 'CANCELAR',
+              onPressed: () => categoryCtrl.cancel(),
+            )
+          ],
         ),
-      );
+      ),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meus_gastos/src/core/models/category/category.model.dart';
 
 class CategoryAddEditController {
   final formKey = GlobalKey<FormState>();
