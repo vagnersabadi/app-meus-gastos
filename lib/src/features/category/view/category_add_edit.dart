@@ -48,7 +48,7 @@ class _CategoryAddEditPage extends State<CategoryAddEditPage> {
             const SizedBox(height: 40),
             ButtonDefault(
               text: 'SALVAR',
-              onPressed: () => categoryCtrl.save(),
+              onPressed: () => categoryCtrl.save(context),
             ),
             const SizedBox(height: 10),
             ButtonDefault(

@@ -6,14 +6,13 @@ enum SharedPreferencesKeys {
 }
 
 class StorageService {
-
- static SharedPreferences? _preferences;
+  static SharedPreferences? _preferences;
 
   static Future<void> _getPreferences() async {
     _preferences ??= await SharedPreferences.getInstance();
   }
 
-    static Future<void> saveBool(SharedPreferencesKeys key, bool value) async {
+  static Future<void> saveBool(SharedPreferencesKeys key, bool value) async {
     await _getPreferences();
     await _preferences!.setBool(key.toString(), value);
   }
@@ -42,5 +41,4 @@ class StorageService {
     await _getPreferences();
     return _preferences!.getStringList(key.toString());
   }
-
 }

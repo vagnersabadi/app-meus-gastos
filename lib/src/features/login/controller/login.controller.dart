@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/models/login/login.model.dart';
+import 'package:meus_gastos/src/core/models/user/user.model.dart';
 import 'package:meus_gastos/src/core/routes/route.enum.dart';
 import 'package:meus_gastos/src/core/services/login/login.service.dart';
 import 'package:meus_gastos/src/core/services/storage/storage.service.dart';
@@ -35,6 +36,9 @@ class LoginController {
         if (context.mounted) {
           if (login.success) {
             StorageService.saveBool(SharedPreferencesKeys.isLoggedIn, true);
+            User user = User(email: email, password: password);
+
+            StorageService.saveString(SharedPreferencesKeys.userLogin, user.toJson());
 
             toHome(context);
           } else {
