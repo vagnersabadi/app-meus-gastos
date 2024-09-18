@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/models/category/category.model.dart';
 import 'package:meus_gastos/src/core/routes/route.enum.dart';
 import 'package:meus_gastos/src/core/services/home/home.services.dart';
+import 'package:meus_gastos/src/core/services/storage/storage.service.dart';
 import 'package:meus_gastos/src/features/category/view/category_add_edit.dart';
 import 'package:bloc/bloc.dart';
 
@@ -53,12 +54,16 @@ class HomeController extends Cubit<HomeStates> {
     );
   }
 
-  toLogin(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      AppRouteEnum.loginPage.name,
-      (route) => false,
-    );
+  toLogin(BuildContext context) async {
+    await StorageService.saveBool(SharedPreferencesKeys.isLoggedIn, false);
+
+    if (context.mounted) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRouteEnum.loginPage.name,
+        (route) => false,
+      );
+    }
   }
 
   action(DismissDirection dir, BuildContext context, Category category) {

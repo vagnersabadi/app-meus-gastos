@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/models/login/login.model.dart';
 import 'package:meus_gastos/src/core/routes/route.enum.dart';
 import 'package:meus_gastos/src/core/services/login/login.service.dart';
+import 'package:meus_gastos/src/core/services/storage/storage.service.dart';
 
 class LoginController {
   final LoginService _loginService = LoginService();
+
   final formLoginKey = GlobalKey<FormState>();
   final TextEditingController emailCtrl = TextEditingController(text: 'vagnerbuzatta@gmail.com');
   final TextEditingController passwordCtrl = TextEditingController(text: 'password');
@@ -30,12 +32,16 @@ class LoginController {
       String message = '';
 
       await _loginService.loginWithEmailAndPassword(email, password).then((LoginResult login) {
-        if (login.success) {
-          _toHome(context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message)),
-          );
+        if (context.mounted) {
+          if (login.success) {
+            StorageService.saveBool(SharedPreferencesKeys.isLoggedIn, true);
+
+            toHome(context);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(message)),
+            );
+          }
         }
       });
     }
@@ -49,11 +55,19 @@ class LoginController {
     );
   }
 
-  _toHome(BuildContext context) {
+  toHome(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
       context,
       AppRouteEnum.homePage.name,
       (route) => false,
     );
+  }
+
+  isLogin(context) async {
+    var isLoggedIn = await StorageService.getBool(SharedPreferencesKeys.isLoggedIn);
+
+    if (isLoggedIn != null && isLoggedIn && context.mounted) {
+      toHome(context);
+    }
   }
 }

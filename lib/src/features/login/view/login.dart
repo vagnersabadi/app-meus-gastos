@@ -14,8 +14,13 @@ class _LoginPageState extends State<LoginPage> {
   LoginController loginCtrl = LoginController();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    loginCtrl.isLogin(context);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
         key: loginCtrl.formLoginKey,
