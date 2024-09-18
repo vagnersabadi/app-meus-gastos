@@ -6,8 +6,8 @@ import 'package:meus_gastos/src/core/services/login/login.service.dart';
 class LoginController {
   final LoginService _loginService = LoginService();
   final formLoginKey = GlobalKey<FormState>();
-  final TextEditingController emailCtrl = TextEditingController();
-  final TextEditingController passwordCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController(text: 'vagnerbuzatta@gmail.com');
+  final TextEditingController passwordCtrl = TextEditingController(text: 'password');
 
   String? validatorEmail(String? value) {
     if (value == null || value.isEmpty) {

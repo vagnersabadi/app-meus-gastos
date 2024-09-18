@@ -26,12 +26,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   _buildMyExpenses() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text('Meus gastos', style: titleStyle2),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _buildMyCategories() {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('Meus gastos', style: titleStyle2),
+            child: Text('Minhas Categorias', style: titleStyle2),
           ),
         ),
         BlocBuilder<HomeController, HomeStates>(
@@ -53,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                   return Center(
                     child: Dismissible(
                       key: const Key('categoriesList'),
-                      onDismissed: (DismissDirection dir) => homeCtrl.action(dir, context),
+                      onDismissed: (DismissDirection dir) => homeCtrl.action(dir, context, category),
                       background: Container(
                         color: primary,
                         alignment: Alignment.centerLeft,
@@ -101,28 +117,24 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               );
+            } else if (state is HomeEmpty) {
+              return SliverFillRemaining(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      state.msg,
+                      style: TextStyle(color: primary, fontSize: 26),
+                    ),
+                  ],
+                ),
+              );
             } else {
               return SliverToBoxAdapter(child: Container());
             }
           },
         ),
       ],
-    );
-  }
-
-  _buildMyCategories() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text('Minhas Categorias', style: titleStyle2),
-            ),
-          ],
-        ),
-      ),
     );
   }
 

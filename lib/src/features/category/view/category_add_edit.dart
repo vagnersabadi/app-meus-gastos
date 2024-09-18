@@ -4,7 +4,7 @@ import 'package:meus_gastos/src/features/category/controller/category_add_edit.c
 import 'package:meus_gastos/src/shared/widgets/button_default.widget.dart';
 
 class CategoryAddEditPage extends StatefulWidget {
-  const CategoryAddEditPage({super.key});
+  const CategoryAddEditPage({super.key });
 
   @override
   State<CategoryAddEditPage> createState() => _CategoryAddEditPage();

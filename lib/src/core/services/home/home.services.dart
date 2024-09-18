@@ -10,13 +10,6 @@ class HomeServices {
         return [
             Category(name: 'Nome1', description: 'description1'),
             Category(name: 'Nome2', description: 'description2'),
-            Category(name: 'Nome2', description: 'description2'),
-            Category(name: 'Nome2', description: 'description2'),
-            Category(name: 'Nome2', description: 'description2'),
-            Category(name: 'Nome2', description: 'description2'),
-            Category(name: 'Nome2', description: 'description2'),
-            Category(name: 'Nome2', description: 'description2'),
-            
         ];
     }
 

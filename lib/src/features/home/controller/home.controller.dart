@@ -19,10 +19,10 @@ class HomeController extends Cubit<HomeStates> {
   openAddEdit(index, BuildContext context) {
     switch (index) {
       case 0:
-        showCategoryAddEditPage(context);
+        showCategoryAddEditPage(context, null);
         break;
       default:
-        showCategoryAddEditPage(context);
+        showCategoryAddEditPage(context, null);
     }
   }
 
@@ -31,7 +31,12 @@ class HomeController extends Cubit<HomeStates> {
 
     try {
       final categories = await homeServices.fetchCategories();
-      emit(HomeSuccess(categories));
+
+      if (categories.isEmpty) {
+        emit(HomeEmpty('Nenhuma categoria cadastrada'));
+      } else {
+        emit(HomeSuccess(categories));
+      }
     } catch (e) {
       emit(HomeError('Não foi possível carregar a lista'));
     }
@@ -39,7 +44,7 @@ class HomeController extends Cubit<HomeStates> {
 
   loadExpenses() {}
 
-  void showCategoryAddEditPage(context) {
+  void showCategoryAddEditPage(context, category) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -56,14 +61,13 @@ class HomeController extends Cubit<HomeStates> {
     );
   }
 
-  action(DismissDirection dir, context) {
+  action(DismissDirection dir, BuildContext context, Category category) {
     print(dir);
 
     if (dir == DismissDirection.endToStart) {
       // deve remover da lista
     } else {
-      // deve abrir o editar
-      showCategoryAddEditPage(context);
+      showCategoryAddEditPage(context, category);
     }
   }
 }
