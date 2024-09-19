@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
 
                   return Center(
                     child: Dismissible(
-                      key: const Key('categoriesList'),
+                      key: ValueKey<Category>(category),
                       onDismissed: (DismissDirection dir) => homeCtrl.action(dir, context, category),
                       background: Container(
                         color: primary,

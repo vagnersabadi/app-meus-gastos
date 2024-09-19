@@ -4,11 +4,13 @@ import 'package:meus_gastos/src/core/theme/variables.dart';
 class ButtonDefault extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final bool disabled;
 
   const ButtonDefault({
     super.key,
     required this.text,
-    required this.onPressed,
+    required this.onPressed, 
+    this.disabled = false,
   });
 
   @override
@@ -22,7 +24,7 @@ class ButtonDefault extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
       ),
-      onPressed: onPressed,
+      onPressed: disabled ? null : onPressed,
       child: Text(
         text,
         style: const TextStyle(

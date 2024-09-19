@@ -20,6 +20,8 @@ class CategoryAddEditPage extends StatefulWidget {
 class _CategoryAddEditPage extends State<CategoryAddEditPage> {
   CategoryAddEditController categoryCtrl = CategoryAddEditController();
   String title = 'Adicionar';
+  bool submitName = false;
+  bool submitDesc = false;
 
   @override
   void initState() {
@@ -29,6 +31,25 @@ class _CategoryAddEditPage extends State<CategoryAddEditPage> {
       categoryCtrl.name.text = widget.category!.name;
       categoryCtrl.description.text = widget.category!.description;
     }
+
+    categoryCtrl.name.addListener(() {
+      setState(() {
+        submitName = categoryCtrl.name.text.isNotEmpty;
+      });
+    });
+
+    categoryCtrl.description.addListener(() {
+      setState(() {
+        submitDesc = categoryCtrl.description.text.isNotEmpty;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    categoryCtrl.name.dispose();
+    categoryCtrl.description.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,7 +75,7 @@ class _CategoryAddEditPage extends State<CategoryAddEditPage> {
                 hintText: 'Nome da categoria',
                 border: OutlineInputBorder(),
               ),
-              // validator: (value) => loginCtrl.validatorEmail(value),
+              validator: (value) => categoryCtrl.validatorTitle(value),
             ),
             const SizedBox(height: 40),
             TextFormField(
@@ -64,17 +85,18 @@ class _CategoryAddEditPage extends State<CategoryAddEditPage> {
                 hintText: 'Descrição da categoria',
                 border: OutlineInputBorder(),
               ),
-              // validator: (value) => loginCtrl.validatorPassword(value),
+              validator: (value) => categoryCtrl.validatorDescription(value),
             ),
             const SizedBox(height: 40),
             ButtonDefault(
               text: 'SALVAR',
+              disabled: !submitDesc || !submitName,
               onPressed: () => categoryCtrl.save(context),
             ),
             const SizedBox(height: 10),
             ButtonDefault(
               text: 'CANCELAR',
-              onPressed: () => categoryCtrl.cancel(),
+              onPressed: () => categoryCtrl.cancel(context),
             )
           ],
         ),

@@ -51,9 +51,10 @@ class HomeController extends Cubit<HomeStates> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
-          canPop: false,
           onPopInvokedWithResult: (bool didPop, Object? result) async {
-            loadCategories();
+            if (result != null && result == true) {
+              loadCategories();
+            }
           },
           child: CategoryAddEditPage(category: category),
         );
