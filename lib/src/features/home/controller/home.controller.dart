@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/models/category/category.model.dart';
+import 'package:meus_gastos/src/core/models/expense/expense.model.dart';
 import 'package:meus_gastos/src/core/routes/route.enum.dart';
 import 'package:meus_gastos/src/core/services/firebase_cloud/firebase_cloud.service.dart';
 import 'package:meus_gastos/src/core/services/home/home.services.dart';
 import 'package:meus_gastos/src/core/services/storage/storage.service.dart';
 import 'package:meus_gastos/src/features/category/view/category_add_edit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:meus_gastos/src/features/expenses/view/expenses_add.dart';
 
 part 'home.state.dart';
 
@@ -21,7 +23,7 @@ class HomeController extends Cubit<HomeStates> {
   openAddEdit(index, BuildContext context) {
     switch (index) {
       case 0:
-        showCategoryAddEditPage(context, category: null);
+        showExpensesAddEditPage(context, expense: null);
         break;
       default:
         showCategoryAddEditPage(context, category: null);
@@ -57,6 +59,23 @@ class HomeController extends Cubit<HomeStates> {
             }
           },
           child: CategoryAddEditPage(category: category),
+        );
+      },
+    );
+  }
+
+  void showExpensesAddEditPage(BuildContext context, {Expense? expense}) {
+    showModalBottomSheet(
+      context: context,
+      
+      builder: (BuildContext context) {
+        return PopScope(
+          onPopInvokedWithResult: (bool didPop, Object? result) async {
+            if (result != null && result == true) {
+              loadExpenses();
+            }
+          },
+          child: ExpenseAddEditPage(expense: expense),
         );
       },
     );

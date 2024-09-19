@@ -36,7 +36,7 @@ class AppRouter {
       case '/expense-add':
         return CupertinoPageRoute(
           settings: RouteSettings(name: settings.name),
-          builder: (_) => const ExpenseAddPage(),
+          builder: (_) => const ExpenseAddEditPage(),
         );
       default:
         return CupertinoPageRoute(
