@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/models/category/category.model.dart';
 import 'package:meus_gastos/src/core/routes/route.enum.dart';
+import 'package:meus_gastos/src/core/services/firebase_cloud/firebase_cloud.service.dart';
 import 'package:meus_gastos/src/core/services/home/home.services.dart';
 import 'package:meus_gastos/src/core/services/storage/storage.service.dart';
 import 'package:meus_gastos/src/features/category/view/category_add_edit.dart';
@@ -20,10 +21,10 @@ class HomeController extends Cubit<HomeStates> {
   openAddEdit(index, BuildContext context) {
     switch (index) {
       case 0:
-        showCategoryAddEditPage(context, null);
+        showCategoryAddEditPage(context, category: null);
         break;
       default:
-        showCategoryAddEditPage(context, null);
+        showCategoryAddEditPage(context, category: null);
     }
   }
 
@@ -45,7 +46,7 @@ class HomeController extends Cubit<HomeStates> {
 
   loadExpenses() {}
 
-  void showCategoryAddEditPage(context, category) {
+  void showCategoryAddEditPage(BuildContext context, {Category? category}) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -54,7 +55,7 @@ class HomeController extends Cubit<HomeStates> {
           onPopInvokedWithResult: (bool didPop, Object? result) async {
             loadCategories();
           },
-          child: const CategoryAddEditPage(),
+          child: CategoryAddEditPage(category: category),
         );
       },
     );
@@ -73,12 +74,11 @@ class HomeController extends Cubit<HomeStates> {
   }
 
   action(DismissDirection dir, BuildContext context, Category category) {
-    print(dir);
-
     if (dir == DismissDirection.endToStart) {
-      // deve remover da lista
+      FirebaseCloudService.removeCategory(category);
+      loadCategories();
     } else {
-      showCategoryAddEditPage(context, category);
+      showCategoryAddEditPage(context, category: category);
     }
   }
 }

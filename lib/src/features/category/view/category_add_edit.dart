@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+
+import 'package:meus_gastos/src/core/models/category/category.model.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
 import 'package:meus_gastos/src/features/category/controller/category_add_edit.contoller.dart';
 import 'package:meus_gastos/src/shared/widgets/button_default.widget.dart';
 
 class CategoryAddEditPage extends StatefulWidget {
-  const CategoryAddEditPage({super.key });
+  final Category? category;
+
+  const CategoryAddEditPage({
+    super.key,
+    this.category,
+  });
 
   @override
   State<CategoryAddEditPage> createState() => _CategoryAddEditPage();
@@ -12,6 +19,17 @@ class CategoryAddEditPage extends StatefulWidget {
 
 class _CategoryAddEditPage extends State<CategoryAddEditPage> {
   CategoryAddEditController categoryCtrl = CategoryAddEditController();
+  String title = 'Adicionar';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.category != null) {
+      categoryCtrl.category = widget.category;
+      categoryCtrl.name.text = widget.category!.name;
+      categoryCtrl.description.text = widget.category!.description;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +41,10 @@ class _CategoryAddEditPage extends State<CategoryAddEditPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Adicionar Categoria', style: titleStyle2),
+            Text(
+              widget.category != null ? 'Editar Categoria' : 'Adicionar Categoria',
+              style: titleStyle2,
+            ),
             const SizedBox(height: 50),
             TextFormField(
               keyboardType: TextInputType.emailAddress,

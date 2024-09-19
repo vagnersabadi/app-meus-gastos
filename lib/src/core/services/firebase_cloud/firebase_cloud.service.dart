@@ -16,16 +16,22 @@ class FirebaseCloudService {
     _user = User.fromJson(user!);
   }
 
+  static Future<void> _init() async {
+    Future.wait([
+      _getPreferences(),
+      _getUser(),
+    ]);
+  }
+
   static Future<void> saveCategory(Category value) async {
-    await _getPreferences();
-    await _getUser();
+    await _init();
 
     await _preferences!.collection(_user!.email).doc(value.id).set(value.toMap());
   }
 
   static Future<List<Category>> getCategories() async {
-    await _getPreferences();
-    await _getUser();
+    await _init();
+
     List<Category> categoriesTemp = [];
 
     QuerySnapshot<Map<String, dynamic>> snap = await _preferences!.collection(_user!.email).get();
@@ -35,5 +41,15 @@ class FirebaseCloudService {
     }
 
     return categoriesTemp;
+  }
+
+  static Future<void> removeCategory(Category value) async {
+    await _init();
+    _preferences!.collection(_user!.email).doc(value.id).delete();
+  }
+
+  static Future<void> editCategory(Category value) async {
+    await _init();
+    _preferences!.collection(_user!.email).doc(value.id).set(value.toMap());
   }
 }
