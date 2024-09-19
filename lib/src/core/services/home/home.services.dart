@@ -1,16 +1,10 @@
 import 'package:meus_gastos/src/core/models/category/category.model.dart';
+import 'package:meus_gastos/src/core/services/firebase_cloud/firebase_cloud.service.dart';
 
 class HomeServices {
 
-
     Future<List<Category>> fetchCategories() async {
-
-        await Future.delayed(const Duration(seconds: 1));
-
-        return [
-            // Category(name: 'Nome1', description: 'description1'),
-            // Category(name: 'Nome2', description: 'description2'),
-        ];
+        return FirebaseCloudService.getCategories();
     }
 
 }

@@ -49,7 +49,13 @@ class HomeController extends Cubit<HomeStates> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return const CategoryAddEditPage();
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (bool didPop, Object? result) async {
+            loadCategories();
+          },
+          child: const CategoryAddEditPage(),
+        );
       },
     );
   }
