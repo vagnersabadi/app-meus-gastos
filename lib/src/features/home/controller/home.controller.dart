@@ -66,19 +66,21 @@ class HomeController extends Cubit<HomeStates> {
 
   void showExpensesAddEditPage(BuildContext context, {Expense? expense}) {
     showModalBottomSheet(
-      context: context,
-      
-      builder: (BuildContext context) {
-        return PopScope(
-          onPopInvokedWithResult: (bool didPop, Object? result) async {
-            if (result != null && result == true) {
-              loadExpenses();
-            }
-          },
-          child: ExpenseAddEditPage(expense: expense),
-        );
-      },
-    );
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return FractionallySizedBox(
+            heightFactor: 0.8,
+            child: PopScope(
+              onPopInvokedWithResult: (bool didPop, Object? result) async {
+                if (result != null && result == true) {
+                  loadExpenses();
+                }
+              },
+              child: ExpenseAddEditPage(expense: expense),
+            ),
+          );
+        });
   }
 
   toLogin(BuildContext context) async {

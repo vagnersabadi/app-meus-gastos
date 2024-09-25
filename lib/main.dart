@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:meus_gastos/src/core/routes/router.dart';
 import 'package:meus_gastos/src/features/login/view/login.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
@@ -18,7 +19,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,6 +30,12 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const LoginPage(),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('pt', 'BR')], 
     );
   }
 }

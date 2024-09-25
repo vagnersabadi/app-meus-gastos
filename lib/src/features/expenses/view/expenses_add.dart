@@ -1,5 +1,7 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:meus_gastos/src/core/models/expense/expense.model.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
 import 'package:meus_gastos/src/features/expenses/controller/expense_add_edit.contoller.dart';
@@ -20,9 +22,12 @@ class ExpenseAddEditPage extends StatefulWidget {
 class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
   ExpenseAddEditController expenseCtrl = ExpenseAddEditController();
 
-  int segmentedControlGroupValue = 0;
+  int segmentedType = 0;
   int _selectedFruit = 0;
-  final Map<int, Widget> myTabs = const <int, Widget>{0: Text("Entrada"), 1: Text("Saída")};
+  final Map<int, Widget> myTabs = const <int, Widget>{
+    0: Text("Entrada"),
+    1: Text("Saída")
+  };
   final List<String> _fruitNames = <String>[
     'Apple',
     'Mango',
@@ -60,7 +65,25 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
     super.dispose();
   }
 
+  _showDate() async {
+    DateTime now = DateTime.now();
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(now.year - 5),
+      lastDate: DateTime(now.year + 5),
+      locale: const Locale('pt'),
+    );
+    if (picked != null) {
+      String result = DateFormat('dd/MM/yyyy').format(picked);
+      setState(() => expenseCtrl.date.text = result);
+    }
+  }
+
   _showDialog() {
+    print('Teste');
+
     CupertinoPicker(
       itemExtent: 32,
       scrollController: FixedExtentScrollController(
@@ -91,7 +114,9 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              widget.expense != null ? 'Editar lançamento' : 'Adicionar lançamento',
+              widget.expense != null
+                  ? 'Editar lançamento'
+                  : 'Adicionar lançamento',
               style: titleStyle2,
             ),
             const SizedBox(height: 50),
@@ -107,30 +132,34 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
             ),
             const SizedBox(height: 40),
             CupertinoSlidingSegmentedControl(
-              groupValue: segmentedControlGroupValue,
+              groupValue: segmentedType,
               children: myTabs,
               onValueChanged: (i) {
-                setState(() {
-                  segmentedControlGroupValue = i!;
-                });
+                setState(() => segmentedType = i!);
               },
             ),
             const SizedBox(height: 40),
             TextFormField(
               controller: expenseCtrl.value,
-              decoration: const InputDecoration(
+              inputFormatters: [
+                CurrencyTextInputFormatter.currency(
+                    locale: 'pt_BR', symbol: 'R\$')
+              ],
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
                 labelText: 'Valor',
-                hintText: 'Informe o valor do lançamento',
+                hintText: 'R\$ 0,00',
                 prefixIcon: Icon(
-                  Icons.arrow_outward,
+                  segmentedType == 0
+                      ? Icons.arrow_downward_rounded
+                      : Icons.arrow_upward_rounded,
                 ),
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               validator: (value) => expenseCtrl.validatorDescription(value),
             ),
             const SizedBox(height: 40),
             GestureDetector(
-              onTap: () => _showDialog(),
               child: TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 controller: expenseCtrl.title,
@@ -143,19 +172,18 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
               ),
             ),
             const SizedBox(height: 40),
-            GestureDetector(
-              onTap: () => _showDialog(),
-              child: TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                controller: expenseCtrl.title,
-                decoration: const InputDecoration(
-                  labelText: 'Data',
-                  hintText: 'Selecionar data',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) => expenseCtrl.validatorTitle(value),
+            TextFormField(
+              onTap: () => _showDate(),
+              keyboardType: TextInputType.text,
+              controller: expenseCtrl.date,
+              decoration: const InputDecoration(
+                labelText: 'Data',
+                hintText: 'Selecionar data',
+                border: OutlineInputBorder(),
               ),
+              // validator: (value) => expenseCtrl.validatorTitle(value),
             ),
+            const SizedBox(height: 40),
             ButtonDefault(
               text: 'SALVAR',
               //   disabled: !submitDesc || !submitName,
