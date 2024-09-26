@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/models/category/category.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expense.model.dart';
@@ -10,6 +11,10 @@ class ExpenseAddEditController {
   final TextEditingController title = TextEditingController();
   final TextEditingController value = TextEditingController();
   final TextEditingController date = TextEditingController();
+
+  final CurrencyTextInputFormatter formatter =
+      CurrencyTextInputFormatter.currency(locale: 'pt_BR', symbol: 'R\$');
+
   int segmentedType = 0;
   late Category category;
 
@@ -20,6 +25,8 @@ class ExpenseAddEditController {
       TypeExpense type =
           segmentedType == 0 ? TypeExpense.input : TypeExpense.output;
 
+      num amount = formatter.getUnformattedValue();
+
       if (expense != null) {
         Expense edited = Expense(
           id: expense!.id,
@@ -27,7 +34,7 @@ class ExpenseAddEditController {
           type: type.name,
           category: category,
           date: date.text,
-          value: value.text,
+          value: amount.toString(),
         );
         FirebaseCloudService.editExpense(edited);
       } else {
@@ -37,7 +44,7 @@ class ExpenseAddEditController {
           type: type.name,
           category: category,
           date: date.text,
-          value: value.text,
+          value: amount.toString(),
         );
         FirebaseCloudService.saveExpense(newExpense);
       }
@@ -61,7 +68,7 @@ class ExpenseAddEditController {
     return null;
   }
 
-  String? validatorDescription(String? value) {
+  String? validatorValue(String? value) {
     if (value == null || value.isEmpty) {
       return 'Entre com texto válido';
     }

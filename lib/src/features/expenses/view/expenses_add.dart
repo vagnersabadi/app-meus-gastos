@@ -58,7 +58,8 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
       expenseCtrl.title.text = expense.title;
       expenseCtrl.value.text = expense.value.toString();
       expenseCtrl.date.text = expense.date;
-      expenseCtrl.segmentedType = expense.type == TypeExpense.input ? 0 : 1;
+      expenseCtrl.segmentedType =
+          expense.type == TypeExpense.input.name ? 0 : 1;
     }
 
     // expense.name.addListener(() {
@@ -139,12 +140,7 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
             const SizedBox(height: 40),
             TextFormField(
               controller: expenseCtrl.value,
-              inputFormatters: [
-                CurrencyTextInputFormatter.currency(
-                  locale: 'pt_BR',
-                  symbol: 'R\$',
-                )
-              ],
+              inputFormatters: [expenseCtrl.formatter],
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Valor',
@@ -152,17 +148,17 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
                 prefixIcon: expenseCtrl.segmentedType == 0
                     ? Container(
                         height: 50,
-                        color: Colors.blue,
+                        color: tertiary,
                         child: const Icon(Icons.arrow_circle_down),
                       )
                     : Container(
                         height: 50,
-                        color: Colors.red,
+                        color: secondary,
                         child: const Icon(Icons.arrow_circle_up),
                       ),
                 border: const OutlineInputBorder(),
               ),
-              validator: (value) => expenseCtrl.validatorDescription(value),
+              validator: (value) => expenseCtrl.validatorValue(value),
             ),
             const SizedBox(height: 40),
             DropDownTextField(

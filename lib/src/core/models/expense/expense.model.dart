@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 import 'package:meus_gastos/src/core/models/category/category.model.dart';
-import 'package:meus_gastos/src/core/models/expense/expenseType.enum.dart';
 
 class Expense {
   String title;

@@ -9,7 +9,9 @@ class HomeLoading extends HomeStates {}
 class HomeSuccess extends HomeStates {
   final List<Category> categories;
 
-  HomeSuccess(this.categories);
+  HomeSuccess(
+    this.categories,
+  );
 }
 
 class HomeError extends HomeStates {
@@ -24,27 +26,31 @@ class HomeEmpty extends HomeStates {
   HomeEmpty(this.msg);
 }
 
+class HomeExpensesInitial extends HomeStates {}
 
-abstract class HomeExpensesStates {}
+class HomeExpensesLoading extends HomeStates {}
 
-class HomeExpensesInitial extends HomeExpensesStates {}
-
-class HomeExpensesLoading extends HomeExpensesStates {}
-
-class HomeExpensesSuccess extends HomeExpensesStates {
-  final List<dynamic> expenses;
+class HomeExpensesSuccess extends HomeStates {
+  final List<Expense> expenses;
 
   HomeExpensesSuccess(this.expenses);
 }
 
-class HomeExpensesError extends HomeExpensesStates {
+class HomeExpensesError extends HomeStates {
   final String error;
 
   HomeExpensesError(this.error);
 }
 
-class HomeExpensesEmpty extends HomeExpensesStates {
+class HomeExpensesEmpty extends HomeStates {
   final String msg;
 
   HomeExpensesEmpty(this.msg);
+}
+
+class HomeExpensesCards extends HomeStates {
+  final String inputValue;
+  final String outputValue;
+
+  HomeExpensesCards(this.inputValue, this.outputValue);
 }

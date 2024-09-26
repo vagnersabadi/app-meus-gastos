@@ -1,6 +1,9 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:meus_gastos/src/core/models/category/category.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expense.model.dart';
+import 'package:meus_gastos/src/core/models/expense/expenseType.enum.dart';
 import 'package:meus_gastos/src/core/routes/route.enum.dart';
 import 'package:meus_gastos/src/core/services/firebase_cloud/firebase_cloud.service.dart';
 import 'package:meus_gastos/src/core/services/home/home.services.dart';
@@ -15,6 +18,8 @@ class HomeController extends Cubit<HomeStates> {
   HomeController() : super(HomeInitial());
 
   final HomeServices homeServices = HomeServices();
+  final CurrencyTextInputFormatter formatter =
+      CurrencyTextInputFormatter.currency(locale: 'pt_BR', symbol: 'R\$');
 
   setState() {
     emit(state);
@@ -46,7 +51,33 @@ class HomeController extends Cubit<HomeStates> {
     }
   }
 
-  loadExpenses() {}
+  Future<void> loadExpenses() async {
+    emit(HomeExpensesLoading());
+
+    try {
+      final expenses = await homeServices.fetchExpenses();
+
+      if (expenses.isEmpty) {
+        emit(HomeExpensesEmpty('Nenhum lançamento cadastrado'));
+      } else {
+        emit(HomeExpensesSuccess(expenses));
+      }
+    } catch (e) {
+      emit(HomeExpensesError('Não foi possível carregar a lista'));
+    }
+  }
+
+  cardsValue(List<Expense> expenses) {
+    double totalOutput = expenses
+        .where((expense) => expense.type == TypeExpense.output.name)
+        .fold(0.0, (p, e) => p + double.parse(e.value));
+
+    double totalInput = expenses
+        .where((e) => e.type == TypeExpense.input.name)
+        .fold(0.0, (p, e) => p + double.parse(e.value));
+
+    emit(HomeExpensesCards(totalInput.toString(), totalOutput.toString()));
+  }
 
   void showCategoryAddEditPage(BuildContext context, {Category? category}) {
     showModalBottomSheet(
@@ -101,6 +132,15 @@ class HomeController extends Cubit<HomeStates> {
       loadCategories();
     } else {
       showCategoryAddEditPage(context, category: category);
+    }
+  }
+
+  actionExpense(DismissDirection dir, BuildContext context, Expense expense) {
+    if (dir == DismissDirection.endToStart) {
+      FirebaseCloudService.removeExpense(expense);
+      loadCategories();
+    } else {
+      showExpensesAddEditPage(context, expense: expense);
     }
   }
 }
