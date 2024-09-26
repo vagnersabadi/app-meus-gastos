@@ -1,8 +1,11 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:meus_gastos/src/core/models/category/category.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expense.model.dart';
+import 'package:meus_gastos/src/core/models/expense/expenseType.enum.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
 import 'package:meus_gastos/src/features/expenses/controller/expense_add_edit.contoller.dart';
 import 'package:meus_gastos/src/shared/widgets/button_default.widget.dart';
@@ -22,27 +25,40 @@ class ExpenseAddEditPage extends StatefulWidget {
 class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
   ExpenseAddEditController expenseCtrl = ExpenseAddEditController();
 
-  int segmentedType = 0;
-  int _selectedFruit = 0;
   final Map<int, Widget> myTabs = const <int, Widget>{
     0: Text("Entrada"),
     1: Text("Saída")
   };
-  final List<String> _fruitNames = <String>[
-    'Apple',
-    'Mango',
-  ];
+
+  List<Category> categories = [];
+
   String title = 'Adicionar';
   bool submitName = false;
   bool submitDesc = false;
 
+  late SingleValueDropDownController _cnt;
+
   @override
-  void initState() {
+  initState() {
+    _cnt = SingleValueDropDownController();
+
     super.initState();
+
+    expenseCtrl.fetchCategories().then((List<Category> c) {
+      setState(() {
+        categories = c;
+      });
+    });
+
     if (widget.expense != null) {
       expenseCtrl.expense = widget.expense;
-      //   expenseCtrl.name.text = widget.expense!.name;
-      //   expenseCtrl.description.text = widget.expense!.description;
+
+      Expense expense = widget.expense!;
+
+      expenseCtrl.title.text = expense.title;
+      expenseCtrl.value.text = expense.value.toString();
+      expenseCtrl.date.text = expense.date;
+      expenseCtrl.segmentedType = expense.type == TypeExpense.input ? 0 : 1;
     }
 
     // expense.name.addListener(() {
@@ -60,8 +76,10 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
 
   @override
   void dispose() {
-    // expenseCtrl.name.dispose();
-    // expenseCtrl.description.dispose();
+    _cnt.dispose();
+    expenseCtrl.title.dispose();
+    expenseCtrl.value.dispose();
+    expenseCtrl.date.dispose();
     super.dispose();
   }
 
@@ -79,28 +97,6 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
       String result = DateFormat('dd/MM/yyyy').format(picked);
       setState(() => expenseCtrl.date.text = result);
     }
-  }
-
-  _showDialog() {
-    print('Teste');
-
-    CupertinoPicker(
-      itemExtent: 32,
-      scrollController: FixedExtentScrollController(
-        initialItem: _selectedFruit,
-      ),
-      onSelectedItemChanged: (int selectedItem) {
-        setState(() {
-          _selectedFruit = selectedItem;
-        });
-      },
-      children: List<Widget>.generate(
-        _fruitNames.length,
-        (int index) {
-          return Center(child: Text(_fruitNames[index]));
-        },
-      ),
-    );
   }
 
   @override
@@ -132,10 +128,12 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
             ),
             const SizedBox(height: 40),
             CupertinoSlidingSegmentedControl(
-              groupValue: segmentedType,
+              groupValue: expenseCtrl.segmentedType,
               children: myTabs,
               onValueChanged: (i) {
-                setState(() => segmentedType = i!);
+                setState(() {
+                  expenseCtrl.segmentedType = i!;
+                });
               },
             ),
             const SizedBox(height: 40),
@@ -143,33 +141,48 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
               controller: expenseCtrl.value,
               inputFormatters: [
                 CurrencyTextInputFormatter.currency(
-                    locale: 'pt_BR', symbol: 'R\$')
+                  locale: 'pt_BR',
+                  symbol: 'R\$',
+                )
               ],
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Valor',
                 hintText: 'R\$ 0,00',
-                prefixIcon: Icon(
-                  segmentedType == 0
-                      ? Icons.arrow_downward_rounded
-                      : Icons.arrow_upward_rounded,
-                ),
+                prefixIcon: expenseCtrl.segmentedType == 0
+                    ? Container(
+                        height: 50,
+                        color: Colors.blue,
+                        child: const Icon(Icons.arrow_circle_down),
+                      )
+                    : Container(
+                        height: 50,
+                        color: Colors.red,
+                        child: const Icon(Icons.arrow_circle_up),
+                      ),
                 border: const OutlineInputBorder(),
               ),
               validator: (value) => expenseCtrl.validatorDescription(value),
             ),
             const SizedBox(height: 40),
-            GestureDetector(
-              child: TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                controller: expenseCtrl.title,
-                decoration: const InputDecoration(
-                  labelText: 'Categoria',
-                  hintText: 'Selecionar categoria',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) => expenseCtrl.validatorTitle(value),
+            DropDownTextField(
+              controller: _cnt,
+              clearOption: false,
+              enableSearch: false,
+              textFieldDecoration: const InputDecoration(
+                labelText: 'Categoria',
+                hintText: 'Selecionar categoria',
+                border: OutlineInputBorder(),
               ),
+              validator: (value) => expenseCtrl.validatorTitle(value),
+              dropDownItemCount: 6,
+              dropDownList: categories.map((Category c) {
+                return DropDownValueModel(
+                  name: c.name,
+                  value: c,
+                );
+              }).toList(),
+              onChanged: (value) => expenseCtrl.category = value.value,
             ),
             const SizedBox(height: 40),
             TextFormField(
@@ -181,7 +194,7 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
                 hintText: 'Selecionar data',
                 border: OutlineInputBorder(),
               ),
-              // validator: (value) => expenseCtrl.validatorTitle(value),
+              validator: (value) => expenseCtrl.validatorDate(value),
             ),
             const SizedBox(height: 40),
             ButtonDefault(
