@@ -1,5 +1,6 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:meus_gastos/src/core/models/category/category.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expense.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expenseType.enum.dart';
@@ -13,7 +14,7 @@ class ExpenseAddEditController {
   final TextEditingController date = TextEditingController();
 
   final CurrencyTextInputFormatter formatter =
-      CurrencyTextInputFormatter.currency(locale: 'pt_BR', symbol: '');
+      CurrencyTextInputFormatter.currency(locale: 'pt_BR', symbol: '', decimalDigits: 0);
 
   int segmentedType = 0;
   late Category category;
@@ -24,33 +25,32 @@ class ExpenseAddEditController {
     if (formKey.currentState!.validate()) {
       TypeExpense type =
           segmentedType == 0 ? TypeExpense.input : TypeExpense.output;
-      RegExp regex = RegExp(r'[,.]');
 
-      String amount = value.text.replaceAll(regex, '');
+      final String amount = value.text.replaceAll('.', '').replaceAll(',', '');
 
-      if (expense != null) {
-        Expense edited = Expense(
-          id: expense!.id,
-          title: title.text,
-          type: type.name,
-          category: category,
-          date: date.text,
-          value: amount.toString(),
-        );
-        FirebaseCloudService.editExpense(edited);
-      } else {
-        Expense newExpense = Expense(
-          id: const Uuid().v1(),
-          title: title.text,
-          type: type.name,
-          category: category,
-          date: date.text,
-          value: amount.toString(),
-        );
-        FirebaseCloudService.saveExpense(newExpense);
-      }
+        if (expense != null) {
+          Expense edited = Expense(
+            id: expense!.id,
+            title: title.text,
+            type: type.name,
+            category: category,
+            date: date.text,
+            value: amount,
+          );
+          FirebaseCloudService.editExpense(edited);
+        } else {
+          Expense newExpense = Expense(
+            id: const Uuid().v1(),
+            title: title.text,
+            type: type.name,
+            category: category,
+            date: date.text,
+            value: amount,
+          );
+          FirebaseCloudService.saveExpense(newExpense);
+        }
 
-      Navigator.pop(context, true);
+        Navigator.pop(context, true);
     }
   }
 

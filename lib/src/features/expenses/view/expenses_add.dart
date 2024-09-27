@@ -1,4 +1,3 @@
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:meus_gastos/src/core/models/category/category.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expense.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expenseType.enum.dart';
 import 'package:meus_gastos/src/core/theme/variables.dart';
-import 'package:meus_gastos/src/features/expenses/controller/expense_add_edit.contoller.dart';
+import 'package:meus_gastos/src/features/expenses/controller/expense_add_edit.controller.dart';
 import 'package:meus_gastos/src/shared/widgets/button_default.widget.dart';
 
 class ExpenseAddEditPage extends StatefulWidget {
