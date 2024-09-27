@@ -1,6 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'package:meus_gastos/src/core/models/category/category.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expense.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expenseType.enum.dart';
@@ -9,10 +14,19 @@ import 'package:meus_gastos/src/core/services/firebase_cloud/firebase_cloud.serv
 import 'package:meus_gastos/src/core/services/home/home.services.dart';
 import 'package:meus_gastos/src/core/services/storage/storage.service.dart';
 import 'package:meus_gastos/src/features/category/view/category_add_edit.dart';
-import 'package:bloc/bloc.dart';
 import 'package:meus_gastos/src/features/expenses/view/expenses_add.dart';
 
 part 'home.state.dart';
+
+class CardsDash {
+  String input;
+  String output;
+
+  CardsDash({
+    required this.input,
+    required this.output,
+  });
+}
 
 class HomeController extends Cubit<HomeStates> {
   HomeController() : super(HomeInitial());
@@ -20,6 +34,8 @@ class HomeController extends Cubit<HomeStates> {
   final HomeServices homeServices = HomeServices();
   final CurrencyTextInputFormatter formatter =
       CurrencyTextInputFormatter.currency(locale: 'pt_BR', symbol: 'R\$');
+
+  final StreamController<CardsDash> streamCtrl = StreamController<CardsDash>.broadcast();
 
   setState() {
     emit(state);
@@ -61,6 +77,7 @@ class HomeController extends Cubit<HomeStates> {
         emit(HomeExpensesEmpty('Nenhum lançamento cadastrado'));
       } else {
         emit(HomeExpensesSuccess(expenses));
+        cardsValue(expenses);
       }
     } catch (e) {
       emit(HomeExpensesError('Não foi possível carregar a lista'));
@@ -68,15 +85,18 @@ class HomeController extends Cubit<HomeStates> {
   }
 
   cardsValue(List<Expense> expenses) {
-    double totalOutput = expenses
+    String totalOutput = expenses
         .where((expense) => expense.type == TypeExpense.output.name)
-        .fold(0.0, (p, e) => p + double.parse(e.value));
+        .fold(0.0, (p, e) => p + double.parse(e.value))
+        .toString();
 
-    double totalInput = expenses
+    String totalInput = expenses
         .where((e) => e.type == TypeExpense.input.name)
-        .fold(0.0, (p, e) => p + double.parse(e.value));
+        .fold(0.0, (p, e) => p + double.parse(e.value))
+        .toString();
 
-    emit(HomeExpensesCards(totalInput.toString(), totalOutput.toString()));
+    CardsDash card = CardsDash(input: totalInput, output: totalOutput);
+    streamCtrl.sink.add(card);
   }
 
   void showCategoryAddEditPage(BuildContext context, {Category? category}) {
@@ -127,21 +147,30 @@ class HomeController extends Cubit<HomeStates> {
     }
   }
 
-  action(DismissDirection dir, BuildContext context, Category category) {
+  Future<bool> actionCategory(
+      DismissDirection dir, BuildContext context, Category category) async {
     if (dir == DismissDirection.endToStart) {
       FirebaseCloudService.removeCategory(category);
-      loadCategories();
+      return true;
     } else {
       showCategoryAddEditPage(context, category: category);
+      return false;
     }
   }
 
-  actionExpense(DismissDirection dir, BuildContext context, Expense expense) {
+  Future<bool> actionExpense(
+      DismissDirection dir, BuildContext context, Expense expense) async {
     if (dir == DismissDirection.endToStart) {
-      FirebaseCloudService.removeExpense(expense);
-      loadCategories();
+      await FirebaseCloudService.removeExpense(expense);
+      return true;
     } else {
       showExpensesAddEditPage(context, expense: expense);
+      return false;
     }
+  }
+
+  String toCurrency(String value) {
+    int v = int.parse(value);
+    return NumberFormat('#,##0.00', 'pt_BR').format(v);
   }
 }

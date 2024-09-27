@@ -24,8 +24,9 @@ class ExpenseAddEditController {
     if (formKey.currentState!.validate()) {
       TypeExpense type =
           segmentedType == 0 ? TypeExpense.input : TypeExpense.output;
+      RegExp regex = RegExp(r'[,.]');
 
-      String amount = value.text;
+      String amount = value.text.replaceAll(regex, '');
 
       if (expense != null) {
         Expense edited = Expense(

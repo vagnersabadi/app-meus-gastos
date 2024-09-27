@@ -47,10 +47,3 @@ class HomeExpensesEmpty extends HomeStates {
 
   HomeExpensesEmpty(this.msg);
 }
-
-class HomeExpensesCards extends HomeStates {
-  final String inputValue;
-  final String outputValue;
-
-  HomeExpensesCards(this.inputValue, this.outputValue);
-}

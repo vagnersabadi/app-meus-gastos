@@ -81,6 +81,12 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
         submitDate = expenseCtrl.date.text.isNotEmpty;
       });
     });
+
+     _cnt.addListener(() {
+      setState(() {
+        submitCategory = _cnt.dropDownValue != null;
+      });
+    });
   }
 
   @override
@@ -215,7 +221,7 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
             const SizedBox(height: 40),
             ButtonDefault(
               text: 'SALVAR',
-              //   disabled: !submitDesc || !submitName,
+              disabled: !submitTitle || !submitValue || !submitDate ||  !submitCategory,
               onPressed: () => expenseCtrl.save(context),
             ),
             const SizedBox(height: 10),

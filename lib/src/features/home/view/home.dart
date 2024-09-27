@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
 
     homeCtrl.loadCategories();
     homeCtrl.loadExpenses();
+
     super.initState();
   }
 
@@ -115,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                     child: Center(
                       child: Dismissible(
                         key: ValueKey<Expense>(expense),
-                        onDismissed: (DismissDirection dir) =>
+                        confirmDismiss: (DismissDirection dir) =>
                             homeCtrl.actionExpense(dir, context, expense),
                         background: Container(
                           color: primary,
@@ -153,9 +154,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                'R\$ ${expense.value}',
+                                'R\$ ${homeCtrl.toCurrency(expense.value)}',
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: colorText,
@@ -203,56 +205,55 @@ class _HomePageState extends State<HomePage> {
   }
 
   _buildMyExpenses() {
-    return BlocBuilder<HomeController, HomeStates>(
-      bloc: homeCtrl,
-      builder: (context, state) {
-        String inputValue = '0';
-        String outputValue = '0';
+    return StreamBuilder<CardsDash>(
+        stream: homeCtrl.streamCtrl.stream,
+        builder: (context, snapshot) {
+          String outputValue = '0';
+          String inputValue = '0';
 
-        if (state is HomeExpensesCards) {
-          inputValue = state.inputValue;
-          outputValue = state.outputValue;
-        }
+          if (snapshot.hasData) {
+            outputValue = homeCtrl.toCurrency(snapshot.data?.output ?? '0');
+            inputValue = homeCtrl.toCurrency(snapshot.data?.input ?? '0');
+          }
 
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Meus gastos', style: titleStyle2),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildCard(
-                      tertiary,
-                      Icons.arrow_circle_down,
-                      'Entradas',
-                      'R\$ $inputValue',
-                    ),
-                    _buildCard(
-                      secondary,
-                      Icons.arrow_circle_up,
-                      'Saídas',
-                      'R\$ $outputValue',
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: SizedBox(
-                    height: 200,
-                    child: _buildListExpenses(),
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text('Meus gastos', style: titleStyle2),
                   ),
-                )
-              ],
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildCard(
+                        tertiary,
+                        Icons.arrow_circle_down,
+                        'Entradas',
+                        'R\$ $inputValue',
+                      ),
+                      _buildCard(
+                        secondary,
+                        Icons.arrow_circle_up,
+                        'Saídas',
+                        'R\$ $outputValue',
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      height: 200,
+                      child: _buildListExpenses(),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        });
   }
 
   _buildMyCategories() {
@@ -283,8 +284,8 @@ class _HomePageState extends State<HomePage> {
                   return Center(
                     child: Dismissible(
                       key: ValueKey<Category>(category),
-                      onDismissed: (DismissDirection dir) =>
-                          homeCtrl.action(dir, context, category),
+                      confirmDismiss: (DismissDirection dir) =>
+                          homeCtrl.actionCategory(dir, context, category),
                       background: Container(
                         color: primary,
                         alignment: Alignment.centerLeft,
