@@ -116,6 +116,7 @@ class HomeController extends Cubit<HomeStates> {
 
   toLogin(BuildContext context) async {
     await StorageService.saveBool(SharedPreferencesKeys.isLoggedIn, false);
+    await homeServices.logoutUser();
 
     if (context.mounted) {
       Navigator.pushNamedAndRemoveUntil(
