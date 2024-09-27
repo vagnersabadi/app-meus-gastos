@@ -13,7 +13,7 @@ class ExpenseAddEditController {
   final TextEditingController date = TextEditingController();
 
   final CurrencyTextInputFormatter formatter =
-      CurrencyTextInputFormatter.currency(locale: 'pt_BR', symbol: 'R\$');
+      CurrencyTextInputFormatter.currency(locale: 'pt_BR', symbol: '');
 
   int segmentedType = 0;
   late Category category;
@@ -25,7 +25,7 @@ class ExpenseAddEditController {
       TypeExpense type =
           segmentedType == 0 ? TypeExpense.input : TypeExpense.output;
 
-      num amount = formatter.getUnformattedValue();
+      String amount = value.text;
 
       if (expense != null) {
         Expense edited = Expense(

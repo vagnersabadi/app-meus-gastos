@@ -33,23 +33,16 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
   List<Category> categories = [];
 
   String title = 'Adicionar';
-  bool submitName = false;
-  bool submitDesc = false;
+  bool submitTitle = false;
+  bool submitValue = false;
+  bool submitCategory = false;
+  bool submitDate = false;
 
   late SingleValueDropDownController _cnt;
 
   @override
   initState() {
     _cnt = SingleValueDropDownController();
-
-    super.initState();
-
-    expenseCtrl.fetchCategories().then((List<Category> c) {
-      setState(() {
-        categories = c;
-      });
-    });
-
     if (widget.expense != null) {
       expenseCtrl.expense = widget.expense;
 
@@ -60,19 +53,34 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
       expenseCtrl.date.text = expense.date;
       expenseCtrl.segmentedType =
           expense.type == TypeExpense.input.name ? 0 : 1;
+      Category c = expense.category;
+      _cnt.dropDownValue = DropDownValueModel(name: c.name, value: c);
+      expenseCtrl.category = c;
     }
 
-    // expense.name.addListener(() {
-    //   setState(() {
-    //     submitName = expenseCtrl.name.text.isNotEmpty;
-    //   });
-    // });
+    super.initState();
 
-    // expense.description.addListener(() {
-    //   setState(() {
-    //     submitDesc = expenseCtrl.description.text.isNotEmpty;
-    //   });
-    // });
+    expenseCtrl.fetchCategories().then((List<Category> c) {
+      setState(() {
+        categories = c;
+      });
+    });
+
+    expenseCtrl.title.addListener(() {
+      setState(() {
+        submitTitle = expenseCtrl.title.text.isNotEmpty;
+      });
+    });
+    expenseCtrl.value.addListener(() {
+      setState(() {
+        submitValue = expenseCtrl.value.text.isNotEmpty;
+      });
+    });
+    expenseCtrl.date.addListener(() {
+      setState(() {
+        submitDate = expenseCtrl.date.text.isNotEmpty;
+      });
+    });
   }
 
   @override
@@ -148,12 +156,24 @@ class _ExpenseAddEditPage extends State<ExpenseAddEditPage> {
                 prefixIcon: expenseCtrl.segmentedType == 0
                     ? Container(
                         height: 50,
-                        color: tertiary,
+                        decoration: BoxDecoration(
+                          color: tertiary,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(6),
+                            bottomLeft: Radius.circular(6),
+                          ),
+                        ),
                         child: const Icon(Icons.arrow_circle_down),
                       )
                     : Container(
                         height: 50,
-                        color: secondary,
+                        decoration: BoxDecoration(
+                          color: secondary,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(6),
+                            bottomLeft: Radius.circular(6),
+                          ),
+                        ),
                         child: const Icon(Icons.arrow_circle_up),
                       ),
                 border: const OutlineInputBorder(),
