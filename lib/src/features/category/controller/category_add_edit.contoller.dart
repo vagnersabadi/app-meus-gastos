@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/models/category/category.model.dart';
-import 'package:meus_gastos/src/core/services/firebase_cloud/firebase_cloud.service.dart';
+import 'package:meus_gastos/src/core/services/firebase/firebase_cloud/firebase_cloud.service.dart';
 import 'package:uuid/uuid.dart';
 
 class CategoryAddEditController {

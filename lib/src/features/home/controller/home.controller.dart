@@ -10,7 +10,7 @@ import 'package:meus_gastos/src/core/models/category/category.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expense.model.dart';
 import 'package:meus_gastos/src/core/models/expense/expenseType.enum.dart';
 import 'package:meus_gastos/src/core/routes/route.enum.dart';
-import 'package:meus_gastos/src/core/services/firebase_cloud/firebase_cloud.service.dart';
+import 'package:meus_gastos/src/core/services/firebase/firebase_cloud/firebase_cloud.service.dart';
 import 'package:meus_gastos/src/core/services/home/home.services.dart';
 import 'package:meus_gastos/src/core/services/storage/storage.service.dart';
 import 'package:meus_gastos/src/features/category/view/category_add_edit.dart';

@@ -1,5 +1,5 @@
 import 'package:meus_gastos/src/core/models/login/login.model.dart';
-import 'package:meus_gastos/src/core/services/firebase_auth/firebase_auth.service.dart';
+import 'package:meus_gastos/src/core/services/firebase/firebase_auth/firebase_auth.service.dart';
 
 class LoginService {
 
