@@ -15,6 +15,26 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   RegisterController registerCtrl = RegisterController();
 
+  bool email = false;
+  bool pass = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    registerCtrl.emailCtrl.addListener(() {
+      setState(() {
+        email = registerCtrl.emailCtrl.text.isNotEmpty;
+      });
+    });
+
+    registerCtrl.passwordCtrl.addListener(() {
+      setState(() {
+        pass = registerCtrl.passwordCtrl.text.isNotEmpty;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,18 +83,13 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 60),
               ButtonDefault(
                 text: 'REGISTRAR',
+                disabled: !email || !pass,
                 onPressed: () => registerCtrl.register(context),
               ),
               const SizedBox(height: 60),
               ButtonDefault(
                 text: 'CANCELAR',
-                onPressed: () => {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    AppRouteEnum.loginPage.name,
-                    (route) => false,
-                  )
-                },
+                onPressed: () => registerCtrl.toLogin(context),
               )
             ],
           ),

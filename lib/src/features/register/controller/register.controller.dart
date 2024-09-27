@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meus_gastos/src/core/models/login/login.model.dart';
+import 'package:meus_gastos/src/core/routes/route.enum.dart';
 import 'package:meus_gastos/src/core/services/login/login.service.dart';
 
 class RegisterController {
@@ -22,21 +23,37 @@ class RegisterController {
   }
 
   register(context) async {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
     String email = emailCtrl.text;
     String password = passwordCtrl.text;
-    String message = '';
 
-    await _loginService.createLoginWithEmailAndPassword(email, password).then((LoginResult login) {
+    await _loginService
+        .createLoginWithEmailAndPassword(email, password)
+        .then((LoginResult login) {
       if (login.success) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Usuário registrado com sucesso!')),
         );
+
+        toLogin(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
+          SnackBar(
+              content: Text(login.message ??
+                  'Erro ao cadastrar usuário, Verifique seu dados.')),
         );
       }
     });
+  }
 
+  toLogin(context) {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRouteEnum.loginPage.name,
+      (route) => false,
+    );
   }
 }

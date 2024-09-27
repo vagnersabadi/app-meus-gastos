@@ -9,8 +9,8 @@ class LoginController {
   final LoginService _loginService = LoginService();
 
   final formLoginKey = GlobalKey<FormState>();
-  final TextEditingController emailCtrl = TextEditingController(text: 'vagnerbuzatta@gmail.com');
-  final TextEditingController passwordCtrl = TextEditingController(text: 'password');
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController passwordCtrl = TextEditingController();
 
   String? validatorEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -30,7 +30,6 @@ class LoginController {
     if (formLoginKey.currentState!.validate()) {
       String email = emailCtrl.text;
       String password = passwordCtrl.text;
-      String message = '';
 
       await _loginService.loginWithEmailAndPassword(email, password).then((LoginResult login) {
         if (context.mounted) {
@@ -43,7 +42,7 @@ class LoginController {
             toHome(context);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(message)),
+              SnackBar(content: Text(login.message ?? 'Erro ao realizar o login. Verifique seu dados.')),
             );
           }
         }

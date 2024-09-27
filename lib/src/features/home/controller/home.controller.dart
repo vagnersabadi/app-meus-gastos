@@ -162,6 +162,7 @@ class HomeController extends Cubit<HomeStates> {
       DismissDirection dir, BuildContext context, Expense expense) async {
     if (dir == DismissDirection.endToStart) {
       await FirebaseCloudService.removeExpense(expense);
+      loadExpenses();
       return true;
     } else {
       showExpensesAddEditPage(context, expense: expense);
